@@ -1,0 +1,1344 @@
+/* Обнуление */
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+  /*чтобы не было снизу артифактного отступа*/
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  /*наследование у родителя, принимают на себя общий дезайн шрифта*/
+  font-size: inherit;
+}
+
+html,
+body {
+  height: 100%;
+  line-height: 1;
+  background: #FAFAFA;
+  /*в 1 раз больше чем размер шрифта font-family (1.2 - по умолчанию*/
+  font-size: 14px;
+  font-weight: 500px;
+  /*потому что его больше всего*/
+  color: #252B42;
+  font-family: Montserrat;
+  /* не ставим кавычки если только одно слово*/
+}
+/*-------------------------------------------------------------------------------------------------------------*/
+.wrapper { /* если добавим для body, то не сможем скроллить сайт */
+  /*обертка, главный контейнер всего*/
+  min-height: 100%;
+  overflow: hiiden;
+  display: flex;
+  flex-direction: column;
+  /*чтобы футер был прижат к низу*/
+}
+/*-------------------------------------------------------------------------------------------------------------*/
+._container { /*ограничивающий контейнер*/
+  max-width: 1046px;
+  padding: 0px 15px;
+  /*отступ контейнера слева и справа по 15px*/
+  margin: 0px auto; /*позволяет контейнеру (блочному элементу) выстроиться по середине (центрирование по строке), если ширина контейнера ограничена и меньше чем родительская */
+  box-sizing: content-box;
+  /* чтобы padding не учитывался в размер контейнера*/
+
+}
+
+._igb {
+  position: relative;
+}
+._igb img{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  object-fit: cover; /*картинка заполняет все пространство и обрезается. +масштабирование при сжатии*/
+}
+
+/*------ШАПКА---------------------------------------------------------------------------------------------------*/
+.header {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 50;
+  /*чтобы была на первом плане*/
+}
+
+.header__container {
+  display: flex;
+  min-height: 104px;
+  align-items: center;
+}
+
+@media(max-width: 479px) {
+  .header_container {
+    min-height: 70px;
+    /* + автоматически меняется line-height*/
+  }
+}
+
+.header__logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: inherit;
+  /* перенимание у родилетя, т.к ссылки не наследуют цвет*/
+}
+
+.header__menu {
+  /*именно для элемента header__menu, а не блока menu (по рпавилам БЭМ
+  мы не можем применять к блоку, которые влияют на окружающие объекты)*/
+  margin: 0px 0px 0px 133px;
+}
+
+@media(max-width: 992px) {
+
+  /*адаптив под планшеты*/
+  .header__menu {
+    margin: 0px 0px 0px 80px;
+    /*отступ между списком и лого*/
+  }
+}
+
+@media(max-width: 767px) {
+
+  /*адаптив под смартфоны (768 - еще планшет)*/
+  .header__menu {
+    margin: 0px 0px 0px 40px;
+    /*отступ между списком и лого*/
+  }
+}
+
+@media(max-width: 479px) {
+  .header__menu {
+    margin: 0px 0px 0px 20px;
+  }
+}
+
+.menu {
+  padding: 5px 0;
+  /*отступы безопасности (сверху и снизу) (чтобы при
+  слишком большом кол-ве пунктов те не прилипали к шапке*/
+}
+
+.menu__list {
+  display: flex;
+  flex-wrap: wrap;
+  /*перенос пунктов меню при сжатии. 
+  Благодаря line-height они не будут прилипать друг к другу*/
+}
+
+/* .menu__item {} */
+
+.menu__item:not(:last-child) {
+  /*ко всем элементам списка, кроме последнего*/
+  margin: 0px 21px 0px 0px;
+}
+
+.menu__link {
+  color: #737373;
+  line-height: calc(24/14 * 100%);
+  /* по макету/шрифт по умолчанию * 100%*/
+  /*если придется изменить шрифт, то и высота строки изменится
+  (можно просто в процентах)*/
+  font-weight: 600;
+}
+
+.menu__link:hover {
+  text-decoration: underline;   
+}
+
+@media(max-width: 479px) {
+  .menu__link {
+    font-size: 18px;
+    /* + автоматически меняется line-height*/
+  }
+}
+
+/*------PAGE---------------------------------------------------------------------------------------------------*/
+.page {
+  flex: 1 1 auto; /*flex-grow -shrink -basis*/ /* 1 0 auto тже вроде можно.   ПРИЖАТИЕ ФУТЕРА К НИЗУ СТРАНИЦЫ*/
+  
+  /*  нужно настроить, какое количество места займет каждый раздел.
+  Мы добились этого благодаря свойству flex, которое объединяет три гибких спецификации в одну:
+
+  ►flex-grow — определяет, сколько свободного места в контейнере переходит к элементу;
+  ►flex-shrink — определяет, насколько будет сокращаться элемент, когда для всего не будет достаточно места;
+  ►flex-basis — размер для элемента, установленный по умолчанию.
+  
+  Мы хотим, чтобы наш верхний и нижний блоки занимали такое количества места, какое им нужно,
+  и все остальное было зарезервировано для основного раздела контента.*/
+
+  /*main позволену увеличиваться, поэтому footer прижат*/
+}
+
+.page__main-block { /*для внешних стилей к блоку*/
+}
+
+.page__services { /* наложение блоков с сервисами на основной блок*/
+  position: relative; /* чтобы блоки отобразились*/
+  z-index: 2; /* чтобы блоки отобразились*/
+  margin: -111px 0px 0px 0px; /*используем именно margin, а не position, потому что только за margin'ом поднимутся все отстальные блоки
+  (иначе между блоком с сервисами и новой страницей была бы пустая пллощадь)
+  Благодаря отрицательному margin нижестоящие блоки будут двигаться за ним*/
+}
+
+.pege__advantages {
+}
+
+.page__practice {
+}
+
+.page__whoweare {
+}
+
+.page__clients {
+}
+
+.page__subscribe:not(:last-child) { /* применяем именно для элемента, а не для блока */
+  margin: 0px 0px 10px 0px;
+}
+
+.page__getintouch {
+}
+
+.page__contact {
+}
+
+
+/*------HEADER-BLOCK---------------------------------------------------------------------------------------------------*/
+/*общий стиль для нескольких блоков*/
+
+
+.header-block { 
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+.header-block__title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 142%; /*не можем указать единый стиль в .header-block, т.к lh не наследуется*/
+}
+
+.header-block__title:not(:last-child) { /*отступ 10px от заголовка*/
+  margin: 0px 0px 10px 0px;
+}
+
+@media (max-width: 992px) {
+  .header-block__title {
+    font-size: 35px;
+  }
+}
+
+@media (max-width: 767px) {
+  .header-block__title {
+    font-size: 30px;
+  }
+}
+
+.header_block__sub-title {
+  color:#737373;
+  line-height: 142%;
+}
+
+
+
+/*------MAIN-BLOCK---------------------------------------------------------------------------------------------------*/
+
+.main-block {
+  position: relative; /* для картинки */
+}
+.main-block__container {
+}
+
+.main-block__body {
+  padding: 184px 0px 191px 0;
+  position: relative; /* чтобы использовать z-index */ 
+  z-index: 2;
+  max-width: 395px; /*ограничение ширины контейнера с текстом (ставим 400 (у меня 395) вместо 509, чтобы текст переносился там, где нужно)*/
+}
+
+@media (max-width: 992px) {
+  .main-block__body{
+    padding: 120px 0px 191px 0;
+  }
+}
+
+@media (max-width: 479px) {
+  .main-block__body{
+    padding: 115px 0px 165px 0;
+  }
+}
+
+.main-block__body > *:not(:last-child) { /*обращение ко всм объектам body первого уровня*/
+  margin: 0px 0px 35px 0px; /*отступ в 35px ко всем объктам первого уровня (кроме последнего),
+  которые находятся внутри коробки body (h1 и 2 div'a). На "a" уже не работает. ДЛЯ СОХРАНЕНИЯ ОТСТУПОВ ПРИ ДОБАВЛЕНИИ/УДАЛЕНИИ ОТСТУПОВ*/
+}
+
+.main-block__title {
+  font-size: 58px;
+  line-height: calc(80/58 *100%); /*58 - указанное тут значение размера шрифта, берется именно оно*/
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+@media (max-width: 479px) {
+  .main-block__title{
+    font-size: 42px;
+  }
+}
+
+.main-block__text {
+  color: #737373;
+  font-size: 20px;
+  line-height: 1.5; /*150%*/
+}
+
+@media (max-width: 479px) {
+  .main-block__text {
+    color: #3a3a3a;
+  }
+}
+
+.main-block__buttons {
+   display: flex; /* АДАПТИВ (было inline-flex) */
+   flex-wrap: wrap; /* перенос при сжатии */
+   margin: -10px 0; /* АДАПТИВ */
+
+}
+
+.main-block__button { /*верстка кнопки таким образом, чтобы при добавлении текста она не ломалась*/
+  border-radius: 37px;
+  display: flex;
+  min-height: 48px;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 36px; /*5px - padding безопасности*/
+  letter-spacing: 0.2px;
+  font-weight: 700;
+  line-height: 150%; /*ставим 150, т.к не всегда адекватно показывает*/
+  text-align: center; /*центровка текста (тут не обязательна)*/
+  margin: 10px 0; /* АДАПТИВ */ /*т.к выше поставили -10px*/
+  transition: all 0.3s ease 0s; /* анимация перехода*/
+}
+
+@media (max-width: 479px) {
+  .main-block__button{
+    flex: 1 1 100%; /* !flex: auto или flex: 1 1 auto – любой из этих параметров позволяет флекс элементу сжиматься и увеличиваться
+    !по мере необходимости, чтобы подстраиваться под любой размер экрана. ПРИ AUTO КНОПКИ СЛИПАЮТСЯ ПО ГОРИЗОНТАЛИ, А 1005 - ВСТАЮТ ВЕРТИКАЛЬНО
+    
+    !flex: none: эквивалентно значению 0 0 auto, при котором flex-элемент не растягивается и не усекается при увеличении и уменьшении контейнера
+    !flex: auto: эквивалентно значению 1 1 auto
+    !flex: initial: эквивалентно значению 0 1 auto*/
+  }
+}
+
+@media (min-width: 479px) { /*подход mobile fisrst (отступ справа только на экранах шире)*/
+  .main-block__button:not(:last-child){
+    margin-right: 10px; /* АДАПТИВ */ /*т.к выше поставили -10px*/
+  }
+}
+
+.main-block__button_orange { 
+  border: #FF7B47 solid 1.3px;
+  color: #FF7B47;
+}
+
+.main-block__button_orange:hover { 
+  background: #FF7B47;
+  color: #fff;
+}
+
+.main-block__button_border {
+  color: #0D5C63;
+  border: #0D5C63 solid 1.3px;
+}
+
+.main-block__button_border:hover {
+  background-color: #0D5C63;
+  border: none;
+  color: #fff;
+}
+
+.main-block__image {
+  position: absolute; /*относительно main-block'a*/
+  width: 100%; 
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+@media (max-width: 1300px) {
+  .main-block__image img { /*обращаемся именно к самой картинке*/
+    object-position: right; /*чтобы люди всегда были на картинке даже при сжатии*/
+  }
+}
+
+@media (max-width: 992px) {
+  .main-block__image {
+    opacity: 0.5; /*чтобы текст был виден на фоне изображения*/
+  }
+}
+
+/*------SERVICES-----------------------------------------------------------------------------------*/
+
+.services {
+}
+.services__container {
+}
+.services__body {
+}
+
+@media (min-width: 670px) { /*только на экранах 670px + . На меньших будут идти в колонку*/
+  .services__body {
+    display: flex;
+    flex-wrap: wrap; /*АДАПТИВ*/
+    margin: 0px -15px; /*-30px (убрали, т.к сделть можно проще)*/ /*раздвинули flex-контейнер по 15px влево и вправо, но колонку вдвигаем паддингами */
+    /*чтобы все шло в линию но между колонками был отступ 30px */
+    /*от обочлочки отнимаем снизу отрицательный отступ --------------------------------------------------------------↓*/
+  }
+}
+
+.services__column {
+  flex: 0 1 33.333%; /*колонка будет 1/3 от всей ширины */
+   /* у дочернего элемента ставим отрицательный отступ------------------------------------↑*/
+  /* margin: 0px 0px 30px 0px  - убрали, т.к сделали проще (+убрали ненужный отступ у последнего блока)*/
+}
+
+
+
+@media (min-width: 670px) {
+  .services__column {
+    padding: 0px 15px; /*сдвигаем колонку паддингами (чтобы не вылезала за границы главного контейнера*/
+    /* чтобы все шло в линию но между колонками был отступ 30px */
+  } 
+ 
+}
+
+/* margin: 0px 0px 30px 0px; и .services__body margin: -30px - от отступы взаимоуничтожаются (невелируются) и у нас нету лишних оттступов */
+
+@media (max-width: 992px) { 
+  .services__column {
+    flex: 0 1 50%;
+  }
+  .services__column:last-child {
+    flex: 1 1 100%; /*чтобы последняя колонка была на всю ширину и не было пустого места*/
+  }
+  .item-service__icon, 
+  .item-service__title, 
+  .item-service__text {
+    text-align: center;
+  }
+  .services__column:not(:last-child) { /*чтобы у поледнего элемента не было отступа*/
+    margin: 0px 0px 30px 0px;
+  }
+}
+
+.services__item { 
+  height: 100%; /*выравнивание блока по высоте (100% высоты блока-родителя)*/
+  box-shadow: 0px 13px 19px 0px rgba(0, 0, 0, 0.07);
+  background-color: #fff;
+  padding: 35px;
+}
+
+@media (max-width: 479px) {
+  .services__item {
+    padding: 25px; /*уменьшаем внутеренние отступы*/
+  }
+}
+
+.item-service {
+}
+
+.item-service_green {
+  background-color: #0D5C63;
+  color: #fff;
+}
+
+.item-service_green .item-service__title{
+  color: #fff;
+}
+
+.item-service_green .item-service__text {
+  color: #fff;
+}
+
+.item-service > *:not(:last-child) {
+  margin: 0px 0px 10px 0px; /* margin-bottom 10px у всех вложенных в service обхектов 1-го уровня (кроме последнего)*/
+}
+
+.item-service__icon {
+}
+.item-service__title {
+  letter-spacing: 0.1px;
+  font-weight: 700;
+  font-size: 24px; 
+  line-height: 133%;
+}
+.item-service__text {
+  color:#737373;
+  font-weight: 500;
+  line-height: 142%;
+}
+
+/*------ADVANTAGES-------------------------------------------------------------------------------------------------------------*/
+
+/* при адаптации отделяем header от верхнего контента сильнее, чем от продолжения блока advantages, чтобы можно было понять что это один блок*/
+
+.advantages {
+  padding: 80px 0;
+}
+
+@media (max-width: 992px) {
+  .advantages {
+    padding: 50px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .advantages {
+    padding: 30px 0;
+  }
+}
+
+.services__container {
+}
+.advantages__header { /* используем элемент header для блока header-block в качестве модификатора (для блока задавать отступ внешний нельзя, а для элементов можно)*/
+  margin: 0px 0px 50px 0px;
+}
+
+@media (max-width: 767px) {
+  .advantages__header { 
+    margin: 0px 0px 25px 0px;
+  }
+}
+
+.header-block {
+}
+.header-block__title {
+}
+.title {
+}
+.header_block__sub-title {
+}
+.sub-title {
+}
+.advantages__body {
+  display: flex; 
+  margin: 0px -15px -30px;   /* ↓--↓--↓--↓--↓--↓--↓--↓--↓ */ 
+  flex-wrap: wrap;
+}
+.advantages__column {
+  padding: 0 15px;
+  flex: 0 1 25%;
+  margin: 0px 0px 30px 0px;  /* ↑--↑--↑--↑--↑--↑--↑--↑--↑ */ /*ДЛЯ ОТСТУПА МЕЖДУ БЛОКАМИ ПРИ УМЕНЬШЕНИИ МАСШТАБА ЭКРАНА*/
+}
+
+@media(max-width: 1020px) {
+  .advantages__column {
+    flex: 0 1 50%   /*чтобы блоки шли по 2 в ряду и занимали по 50% пространства*/
+  }
+}
+
+@media(max-width: 560px) {
+  .advantages__column {
+    flex: 0 1 100%   /*чтобы блоки шли по 1 в ряду и занимали по 100% пространства*/
+  }
+}
+
+.advantages__item {
+  background-color: #fff;
+  padding: 30px; /*оставляем только 30px и не делаем по 40 со сторон, т.к тогда не влазит текст */
+  text-align: center;
+  font-weight: 700; /*т.к для value и text*/
+}
+
+.advantages__item > *:not(:last-child) { /*наследование для элементов только первого уровня*/
+  margin: 0px 0px 10px 0px;
+}
+
+.advantages__icon { 
+  height: 48px; /* устанавливаем одинаковую высоту картинок чтобы блоки были одинаковой высоты*/
+  display: flex;
+  align-items: flex-end; /*прибиваем низкие иконки к низу*/
+  justify-content: center;
+}
+.advantages__value {
+  font-size: 40px;
+  line-height: 142%;
+  letter-spacing: 0.2px;
+}
+.advantages__text {
+  color: #737373;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.1px;
+}
+
+/*-----PRACTICE---------------------------------------------------------------------------*/
+
+.practice {
+  padding: 125px 0px 80px 0px;
+}
+
+@media (max-width: 993px) {
+  .practice {
+    padding: 40px 0px 80px 0px; /* уменьшаем отступ между страничками при уменьшении размеров экрана */ 
+  }
+} 
+
+@media (max-width: 767px) {
+  .practice {
+    padding: 0px 0px 40px 0px;
+  }
+}
+
+.practice__container {
+}
+
+.practice__header { 
+  margin: 0px 0px 45px 0px; /* отсуп между header и body */
+}
+
+@media (max-width: 767px) {
+  .practice__header {
+    margin: 0px 0px 25px 0px; /* отсуп между header и body */
+  }
+}
+
+.practice__body {
+  margin: 0px -20px -30px; /* ↓-↓-↓-↓-↓-↓-↓-↓ */ /* -30px - снизу */
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.practice__column {
+  padding: 0px 20px; /* ↑-↑-↑-↑-↑-↑-↑-↑ */
+  margin: 0px 0px 30px 0px; /*  компенсируем отрицательный padding (это для того, чтобы между карточками появился отступ, но и чтобы он не суммировался с отступом от .practice) */
+  flex: 0 1 25%;
+} 
+
+@media (max-width: 1040px) {
+  .practice__column {
+    flex: 0 1 50%;
+  }
+} 
+
+@media (max-width: 630px) {
+  .practice__column {
+    flex: 0 1 100%;
+  }
+}
+
+.practice__item {
+
+}
+
+.item-practice {
+  background-color: #fff;
+  height: 100%; /* чтобы карточки были одинаковы по высоте и картинки всегда были внизу карточки */
+  display: flex; /* чтобы карточки были одинаковы по высоте */  
+  flex-direction: column; /* чтобы карточки были одинаковы по высоте */
+}
+
+.item__practice__content{
+  padding: 30px; /*для текста, но без каритнки*/
+  flex: 1 1 auto; /* чтобы карточки были одинаковы по высоте (тут позволяем контенту (тексту) расширяться, чтобы он придавливался) */
+} 
+
+.item-practice__link {
+  color: inherit; /* #252B42 */
+  display: inline-block; /* чтобы можно было применить margin */
+}
+
+.item-practice__link:hover {
+  text-decoration: underline;
+}
+
+.item-practice__link:not(:last-child) {
+  margin: 0px 0px 15px 0px;
+}
+
+.item-practice__title {
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.1px;
+  font-weight: 700;
+}
+.item-practice__text {
+  color: #737373;
+  line-height: 142%;
+}
+.item-practice__image {
+  display: block; /* чтобы можно было применить следущий padding */
+  /* padding: 0px 0px 60% 0px;  - на видео картинка не отображалась, поэтому там делали этот padding. У нас отображается, поэтому убираем, чтобы не было лишнего отступа
+  */ /* H/W * 100%. Делаем padding чтобы картинка отображалась (а паддинг - чтобы высота и ширина были пропорицональны*/
+}
+
+.item-practice__image img{
+   width: 100%;
+}
+
+/* ------WHO WE ARE------------------------------------------------------------------ */
+
+.whoweare {
+  padding: 80px 0px 130px 0px; /* хотя по макету 100px */
+  background-color: #fff;
+}
+
+.whoweare__container  {
+
+}
+
+.whoweare__header {
+  margin: 0px 0px 100px 0px;
+} 
+
+.whoweare__body {
+  display: flex; 
+  align-items: flex-start; /* прижатость к верху (можно просто start) */
+}
+
+
+
+.whoweare__video {
+  flex: 0 0 57%; /* ширина контейнера с видео (600px) / ширина ограничивающего контейнера(1046px) * 100% */
+  position: relative;
+  /* padding: 0px 0px 100px 0px; h(442px)/w(600px)*100%  - не выходит, т.к. padding берется не от flex-элемента, а от flex-контейнера*/
+  padding: 0px 0px 42.25% 0px; /* делим ширину конетйнера с видео на ширину огрничивающего блока и *100% */
+}
+
+.whoweare__video iframe { /* т.к видео вставлено через тег iframe, то к нему и образаемся */
+  position: absolute; /* абсолютное позиционирование относительно родителя video (обязательно к тегу video указать pos: relative, иначе будет в начале страницы)*/
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  object-fit: cover; /* чтобы видео заполняло весь конейнер и при необходимости обрезалось по размеру контейнера*/
+}
+
+.whoweare__content {
+  flex: 1 1 auto; /* делаем вторую колонку автоматической (чтобы если видео не будет выведено, то контент займет ширину) */
+  padding: 20px 0px 0px 121px; /* отступ слева от контента (от между видео и текстом)*/
+}
+
+.whoweare__title {
+  font-weight: 700;
+  font-size: 40px;
+  letter-spacing: 0.2px;
+  line-height: 142%;
+}
+
+.whoweare__title:not(:last-child) {
+  margin: 0px 0px 10px 0px;
+}
+
+.whoweare__text {
+  color: #737373;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 142%;
+}
+
+.whoweare__top:not(:last-child) {
+  margin: 0px 0px 50px 0px;
+}
+
+.whoweare__items {
+  /* margin: 50px 0px 0px 0px; СХЛОПЫВАНИЕ. При двух внешних отступах (если не текста, а только тайтл) происходит схлопывание и учитывается только больший из них */
+  /* УБРАЛИ, Т.К ОБЕРНУЛИ ВЕРХУШКУ В КОРОБКУ (top) и применили отступы к ней*/
+}
+
+.whoweare__item {
+}
+
+.whoweare__item:not(:last-child) {
+  margin: 0px 0px 30px 0px;
+}
+
+.item-whoweare {
+  display: flex;
+}
+
+.item-whoweare__icon {
+  flex: 0 0 32px; /*  картинка не будет сужаться или растягиваться. Ширина будет равна 250 пикселям. */
+}
+
+.item-whoweare__body {
+  flex: 1 1 auto; /* позволяем увеличиваться*/
+  padding: 0px 0px 0px 20px; /* отступ между картинкой и контентом */
+} 
+
+.item-whoweare__title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+.item-whoweare__title:not(:last-child) {
+  margin: 0px 0px 5px 0px; /* отступ от заголовка до текста */
+}
+
+.item-whoweare__text {
+  color: #737373;
+  line-height: 171%;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  width: 225px; /* укорачиваем текст и ставим троеточие */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* требует фиксированных значений по ширине */
+}   
+
+@media (max-width: 1080px) {
+  .whoweare__content {
+    padding: 0px 0px 0px 50px;
+  }
+}
+
+@media (max-width: 950px ) { /* закидываем всё в один media-запрос для 950px */
+  .whoweare {
+    padding: 50px 0px 50px 0px; /* по видео не так, но похер */
+  }
+  .whoweare__body {
+    flex-direction: column-reverse; /* становим элементы в колонку (сначала контент, потом видео, для этого reverse, т.к по макету снавала идет видео)*/
+    align-items: stretch; /* растяжени ена всю ширину родителя */ /* чтобы видео не пропало (из-за flex-start ивдео прижималось к левому краю, а мы вернули ему резиновость*/
+  }
+  .whoweare__title {
+    font-size: 24px;
+  }
+  .whoweare__content {
+    padding: 0px 0px 0px 0px;
+  }
+  .whoweare__video {
+    padding: 0px 0px 56.25% 0px; /* 56,25 - в видео на ютуб значени по умолч.: h/w*100% */
+  }
+  .whoweare__video:not(:last-child) {
+    margin: 50px 0px 0px 0px;
+  }
+  .whoweare__header {
+    margin: 0px 0px 30px 0px;
+  }
+}
+
+@media (max-width: 767px) {
+  .whoweare {
+    padding: 20px 0px 50px 0px; /* по видео не так, но похер */
+  }
+  .whoweare__top:not(:last-child) {
+    margin: 0px 0px 30px 0px; /* отступ между текстом и контента с картинками */
+  }
+  .whoweare__video:not(:last-child) {
+    margin: 30px 0px 0px 0px; /* отступ между контентом и видео */
+  }
+}
+
+ /*-----CLIENTS----------------------------------------------------------------------------------*/
+
+.clients {
+  padding: 50px 0;
+}
+
+@media (max-width: 767px) {
+  .whoweare {
+    padding: 30px 0;
+  }
+}
+
+.clients__container {
+}
+.clients__items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  /* flex-direction: row;  - и так стоит*/
+  /* justify-content: space-around; */ 
+}
+.clients__item {
+  padding: 8px 15px; /* отступы безопасности (чтобы при уменьшении размера экрана не слипались) */
+  flex: 0 1 16.6667%; /* 16,6667% - размер по муолчанию (100%/6) */
+  text-align: center;
+  min-width: 140px; /* чтобы после max-width картинки вели себя нормально и переносились на новую строку */
+}
+
+.clients__item img{
+  /* max-width: 100%; */
+}
+
+/*-----SUBSCRIBE----------------------------------------------------------------------------------------*/
+
+.subscribe {
+  position: relative; /* чтобы сделать декоративную синюю полосу */
+  padding: 0px 0px 20px 0px;
+}
+
+.subscribe::before { /* можно и after */
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;  
+  width: 100%;
+  height: 77px;
+  background-color: #252b42;
+}
+
+.subscribe__container {
+}
+
+.subscribe__body {
+  position: relative;
+  z-index: 2; /* ЧТОБЫ БЛОК НЕ ПЕРЕКРЫВАЛСЯ ЛИНИЕЙ */
+  /* display: flex; - убираем, т.к поместили его в mobile first */
+  /* justify-content: space-between; - убираем, т.к поместили его в mobile first */
+  padding: 30px 50px;
+  /* align-items: center; - убираем, т.к поместили его в mobile first */
+  background-color: #17213C;
+  border-radius: 2px;
+ } 
+
+@media (min-width: 1070px) { /* используем mobile first*/
+  .subscribe__body {
+    margin: 0px 30px; /*боковые отсутпы от контейнера */
+  }
+    
+}
+
+.subscribe__title {
+  color: #fff;
+  font-size: 24px;
+  line-height: 133%;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+}
+
+@media (max-width: 810px) {
+  .subscribe__title {
+    margin: 0px 0px 20px 0px; 
+  }
+  .subscribe__body {
+    margin: 0px -15px; /* !раздвигаем блок, чтобы ликвидаровать двойной отступ (убрать отступ от _container (15px) */
+    padding: 20px 25px;
+  }
+}
+
+@media (min-width: 810px) { /* снова используем mobile first */
+  .subscribe__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+  }
+  .subscribe__title {
+    max-width: 266px; /* чтобы на маленьких экранах текст не переносился из за ограничителя */
+  }
+}
+
+.subscrbe__form {
+  flex: 0 1 50%; 
+  display: flex;
+  align-items: center;
+}
+
+.subscribe__input {
+  width: 100%; /* для адаптива */
+  flex: 1 1 auto;
+  min-height: 58px;
+  background-color: #F9F9F9;
+  color: #737373;
+  padding: 0px 20px;
+  border-radius: 5px 0px 0px 5px;
+  border: 1px solid #E6E6E6;
+  border-right: 0px;
+  background: #F9F9F9;
+  font-size: 16px;
+}
+
+
+
+.subscribe__button {
+  background-color: #FF7B47;
+  border: 1px solid #E6E6E6;
+  border-radius: 0px 5px 5px 0px;
+  display: flex;
+  min-height: 58px;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 14px;
+  line-height: 200%;
+  letter-spacing: 0.2px;
+  padding: 0 22.5px;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+}
+
+.subscribe__button:hover {
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+@media (max-width: 810px) {
+  .subscribe__button {
+    padding: 0 15px;
+  }
+  .subscribe__input {
+    padding: 0px 15px;
+  }
+}
+
+
+/*-------GETINTOUCH----------------------------------------------------------------------*/
+
+.getintouch {
+  padding: 80px 0px 135px 0px; /* хотя по макету вроде 148px */
+}
+
+.getintouch__container {
+}
+
+.getintouch__header {
+  padding: 0px 0px 80px 0px;
+}
+
+.getintouch__items {
+  margin: 0px -15px; /* чтобы ликвидировать отступ от _container */
+}
+
+@media (min-width: 992px) {
+  .getintouch__items {
+    margin: 0px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.getintouch__item {
+  flex: 0 1 33.333%;
+  background-color: #fff;
+  padding: 50px 15px; /* 15px - отступ безопасности */
+}
+
+.item-getintouch {
+  display: flex;
+  flex-direction: column; /* чтобы было в колонку */
+  justify-content: center;
+  align-items: center;
+}
+
+.item-getintouch_active {
+  background-color: #252B42;
+  color: #fff;
+  padding: 80px 15px;
+}
+
+.item-getintouch_active .item-getintouch__button {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.item-getintouch > *:not(:last-child) { /* селектор для всех элеметов 1-го уровня вложенности */ /* только не для последнего элемента в item */ 
+  margin: 0px 0px 15px 0px;
+}
+
+.item-getintouch__icon {
+}
+
+.item-getintouch__emails { /* пишем это отдельно для email, т.к это a - строчный объект*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+}
+
+.item-getintouch__email {
+  color: inherit; /* наследуем цвет */
+  font-weight: 600;
+  line-height: 150%;
+
+}
+
+.item-getintouch__email:hover{
+  text-decoration: underline;
+}
+
+.item-getintouch__label {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+.item-getintouch__button {
+  min-height: 44px;
+  border-radius: 5px;
+  border: 1px solid #FF7B47;  
+  color: #FF7B47;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5px 20px; /* 5px - padding безопасности */
+  line-height: 142%; /* 150% по макету */
+  font-weight: 600;
+
+  transition: all 0.3s ease 0s; /* анимация перехода */
+}
+
+.item-getintouch__button:hover {
+  border: 1px solid #FF7B47;
+  background-color: #FF7B47;
+  color: #fff;
+}
+
+
+@media (max-width: 992px) {
+  .getintouch {
+    padding: 50px 0px;
+  }
+  .getintouch__header {
+    padding: 0px 0px 50px 0px; /* чтобы все три блока были одинаковыми по высоте */
+  }
+  .item-getintouch_active {
+    padding: 50px 15px;   
+  }
+}
+
+@media (max-width: 767px) {
+  .getintouch__header {
+    padding: 0px 0px 30px 0px;
+  }
+}
+
+/*------CONTACT-----------------------------------------------------------*/
+
+.contact {
+  background-color: #fff;
+  padding: 42px 0;
+}
+
+.contact__container {
+}
+
+.contact__content {
+  padding: 0px 0px 20px 0px; /* отступ между кнопкой и контентом */
+}
+
+@media(min-width: 767px) {
+  .contact__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .contact__content {
+    padding: 0px 20px 0px 0px; /*padding безопасонти*/
+  }
+}
+
+
+
+.contact__title {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 133.33%;
+  letter-spacing: 0.1px;
+}
+
+.contact__title:not(:last-child) {
+  margin: 0px 0px 10px 0px;
+}
+
+.contact__text {
+  color: #737373;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 142%;
+  letter-spacing: 0.2px;
+}
+
+.contact__button {
+  display: flex;
+  border-radius: 5px;
+  background-color: #FF7B47;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20%;
+  padding: 5px 40px;
+  letter-spacing: 0.2px;
+  min-height: 58px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  transition: background-color 0.3s ease 0s; /* без all */
+}
+
+.contact__button:hover {
+  background-color:#d86030;
+}
+
+/* ------FOOTER------------------------------------------------------------------------------ */
+
+.footer {
+}
+.footer__top {
+  background-color: #17213C;
+  padding: 35px 0; /* было 50, 10 добавили к footer_column */
+}
+.footer__main {
+
+}
+.footer__row {
+  display: flex;
+  margin: 0px -15px; /*безопасность*/
+  flex-wrap: wrap;
+}
+.footer__column {
+  padding: 15px 15px; /*безопасность*/ /*сюда сверху и мнизу добавили по 10, чтобы при переносе колонн был отступ */
+  flex: 0 1 16.667%; /* их тут почему-то 6 */
+}   
+
+.footer__column:last-child {
+  flex: 0 1 33.334%;
+}
+
+@media (max-width: 992px ) {
+  .footer__column {
+    flex: 0 1 25%;
+  }
+  .footer__column:last-child {
+    flex: 1 1 100%;
+  }
+}	
+
+@media (max-width: 767px ) {
+  .footer__column {
+    flex: 0 1 50%;
+  }
+}	
+
+.footer__label {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 150%;
+  margin: 0px 0px 20px 0px;
+}
+.foooter__menu {
+}
+
+.menu-footer {
+}
+.menu-footer__list {
+}
+
+.menu-footer__item:not(:last-child) {
+  margin: 0px 0px 10px 0px;
+}
+.menu-footer__link {
+  color: #fff;
+  display: inline-block; /* чтобы сработал line-height */
+  letter-spacing: 0.2px;
+  line-height: 171%;
+}
+
+.menu-footer__link:hover{ 
+  text-decoration: underline;
+}
+
+.footer__contacts {
+}
+.contacts-footer {
+  display: flex;
+  flex-direction: column;
+}
+.contacts-footer__item {
+  color: #fff;
+  line-height: 142%;
+  padding: 0px 0px 0px 34px; /* отступ слева от картинки */
+  /* line-height: 30px; */
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+.contacts-footer__item:hover { /*для последнего столбца*/
+  text-decoration: underline;
+}
+
+.contacts-footer__item:not(:last-child) {
+  margin: 0px 0px 12px 0px;
+}
+.contacts-footer__item_phone {
+  background: url('../images/footer/icons/01.svg') /*left*/ 0 0 no-repeat; /*чтобы иконка была прибита к верху. Если использовать left, то будет по середине */
+}
+.contacts-footer__item_map {
+  background: url('../images/footer/icons/02.svg') 0 0 no-repeat; /*можно выводить и через html*/
+}
+.contacts-footer__item_email {
+  background: url('../images/footer/icons/03.svg') 0 0 no-repeat;
+}
+
+/*-----FOOTER-BOOTTOM-----------------------------------------------------------------*/
+
+.footer__bottom {
+  padding: 25px 0;
+}
+
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer__copy {
+  color:#737373;
+  font-weight: 600;
+  line-height: 171%;
+  letter-spacing: 0.2px;
+}
+.footer__social {
+}
+.social {
+  display: flex;
+  align-items: center;
+}
+.social__item:not(:last-child) {
+  margin: 0px 20px 0px 0px; /*отступ справа от иконки (кроме последней)*/
+}
+
+@media (max-width: 767px) {
+  .footer__container {
+    flex-direction: column;
+  }
+  .footer__copy {  
+    margin: 0px 0px 15px 0px;
+    text-align: center;
+  }
+}	
+
